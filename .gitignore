@@ -1,3 +1,9 @@
+#module path
+mods/
+
+#modular jar files
+modularjars/
+
 #Maven
 target/
 pom.xml.tag
