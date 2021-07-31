@@ -38,7 +38,7 @@ public class HelloWorldServiceTest
     }
 
     @Test
-    public void welcomeMessageTest() {
+    void welcomeMessageTest() {
 
         var response = webClient.get()
                 .path("/api")
@@ -49,7 +49,7 @@ public class HelloWorldServiceTest
     }
 
     @Test
-    public void pathParamTest() {
+    void pathParamTest() {
 
         var name = "hakdogan";
         var response = webClient.get()

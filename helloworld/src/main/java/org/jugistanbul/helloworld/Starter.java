@@ -33,9 +33,7 @@ public class Starter
         webServer.thenAccept(ws -> {
             LOGGER.info("Web server is up! http://localhost:" + ws.port() + "/api");
             ws.whenShutdown().thenRun(() -> LOGGER.info("Web server is Down. Good bye!"));
-        }).exceptionallyAccept(t -> {
-            LOGGER.log(Level.SEVERE, "Startup failed: " + t.getMessage());
-        });
+        }).exceptionallyAccept(t -> LOGGER.log(Level.SEVERE, String.format("Startup failed: %s", t.getMessage())));
 
         return webServer;
     }
