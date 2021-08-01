@@ -45,7 +45,7 @@ public class HelloWorldServiceTest
                 .request(String.class)
                 .await();
 
-        assertEquals("Hello from Helidon SE!", response);
+        assertEquals("Hello from helloworld module!", response);
     }
 
     @Test
