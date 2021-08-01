@@ -13,7 +13,11 @@ import io.helidon.webserver.Service;
 public class HelloWorldService implements Service
 {
 
-    public HelloWorldService(final Config config) { }
+    private final Config config;
+
+    public HelloWorldService(final Config config) {
+        this.config = config;
+    }
 
     @Override
     public void update(Routing.Rules rules) {
@@ -22,7 +26,7 @@ public class HelloWorldService implements Service
     }
 
     private void welcomeMessageHandler(final ServerRequest request, final ServerResponse response) {
-        response.send("Hello from Helidon SE!");
+        response.send(config.get("app.greeting").asString().orElse("Hello from Helidon SE!"));
     }
 
     private void pathParamHandler(final ServerRequest request, final ServerResponse response) {

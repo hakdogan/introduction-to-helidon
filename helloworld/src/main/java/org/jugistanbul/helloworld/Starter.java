@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * @author hakdogan (huseyin.akdogan@patikaglobal.com)
  * Created on 30.07.2021
  **/
-public class Starter
+public final class Starter
 {
 
     private static final Logger LOGGER = Logger.getLogger(Starter.class.getName());
