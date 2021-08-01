@@ -30,7 +30,7 @@ Date: Fri, 30 Jul 2021 20:25:10 +0300
 connection: keep-alive
 content-length: 22
 
-Hello from Helidon SE!
+Hello from helloworld module!
 
 ➜  ~ http GET http://localhost:8080/api/hakdogan
 HTTP/1.1 200 OK
