@@ -2,3 +2,4 @@ app:
   greeting: Hello from helloworld module!
 server:
   port: 8080
+  host: 0.0.0.0

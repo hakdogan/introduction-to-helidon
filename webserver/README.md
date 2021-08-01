@@ -1,6 +1,6 @@
-# Helloworld
+# Helidon WebServer
 
-Helloworld module shows `Helidon WebServer` usage. The WebServer object represents an immutably configured WEB server and provides a basic lifecycle and monitoring API.
+Helidon WebServer object represents an immutably configured WEB server and provides a basic lifecycle and monitoring API. This module introduces `Helidon SE WebServer` and demonstrates the basic usages.
 
 ```java
     static Single<WebServer> startWebServer(){

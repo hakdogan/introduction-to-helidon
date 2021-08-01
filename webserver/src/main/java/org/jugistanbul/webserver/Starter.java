@@ -1,10 +1,10 @@
-package org.jugistanbul.helloworld;
+package org.jugistanbul.webserver;
 
 import io.helidon.common.reactive.Single;
 import io.helidon.config.Config;
 import io.helidon.webserver.Routing;
 import io.helidon.webserver.WebServer;
-import org.jugistanbul.helloworld.service.HelloWorldService;
+import org.jugistanbul.webserver.service.GreetingService;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +25,7 @@ public final class Starter
     static Single<WebServer> startWebServer(){
 
         var config = Config.create();
-        var service = new HelloWorldService(config);
+        var service = new GreetingService(config);
 
         Single<WebServer> webServer = WebServer.builder(Routing.builder().register("/api", service)
                 .build()).config(config.get("server")).build().start();

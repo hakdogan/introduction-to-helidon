@@ -1,4 +1,4 @@
-package org.jugistanbul.helloworld;
+package org.jugistanbul.webserver;
 
 import io.helidon.webclient.WebClient;
 import io.helidon.webserver.WebServer;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author hakdogan (huseyin.akdogan@patikaglobal.com)
  * Created on 30.07.2021
  **/
-public class HelloWorldServiceTest
+public class GreetingServiceTest
 {
     private static WebServer webServer;
     private static WebClient webClient;

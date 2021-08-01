@@ -1,4 +1,4 @@
-package org.jugistanbul.helloworld.service;
+package org.jugistanbul.webserver.service;
 
 import io.helidon.config.Config;
 import io.helidon.webserver.Routing;
@@ -10,12 +10,12 @@ import io.helidon.webserver.Service;
  * @author hakdogan (huseyin.akdogan@patikaglobal.com)
  * Created on 30.07.2021
  **/
-public class HelloWorldService implements Service
+public class GreetingService implements Service
 {
 
     private final Config config;
 
-    public HelloWorldService(final Config config) {
+    public GreetingService(final Config config) {
         this.config = config;
     }
 
