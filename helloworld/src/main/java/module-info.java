@@ -7,4 +7,6 @@ module helloworld
     requires io.helidon.config;
     requires io.helidon.webserver;
     requires java.logging;
+
+    exports org.jugistanbul.helloworld.service;
 }
