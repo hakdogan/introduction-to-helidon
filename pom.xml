@@ -22,7 +22,8 @@
     </properties>
 
     <modules>
-        <module>helloworld</module>
+        <module>webserver</module>
+        <module>config</module>
     </modules>
 
     <dependencies>
@@ -33,6 +34,10 @@
         <dependency>
             <groupId>io.helidon.media</groupId>
             <artifactId>helidon-media-jsonp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.media</groupId>
+            <artifactId>helidon-media-jsonb</artifactId>
         </dependency>
         <dependency>
             <groupId>io.helidon.config</groupId>
