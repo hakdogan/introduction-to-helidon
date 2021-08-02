@@ -32,7 +32,7 @@ content-length: 22
 
 Hello from helloworld module!
 
-➜  ~ http GET http://localhost:8080/api/hakdogan
+➜  ~ http GET http://localhost:8080/api/hello/hakdogan
 HTTP/1.1 200 OK
 Content-Type: text/plain
 Date: Fri, 30 Jul 2021 20:26:37 +0300

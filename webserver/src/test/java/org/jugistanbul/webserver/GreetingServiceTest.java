@@ -53,7 +53,7 @@ public class GreetingServiceTest
 
         var name = "hakdogan";
         var response = webClient.get()
-                .path(String.format("/api/%s", name))
+                .path(String.format("/api/hello/%s", name))
                 .request(String.class)
                 .await();
 
