@@ -28,8 +28,8 @@ public final class ConfigService
         var service = new GreetingService(config);
         Single<WebServer> webServer = WebServer
                 .builder(Routing.builder()
-                                .register("/config", service)
-                                .build())
+                        .register("/config", service)
+                        .build())
                 .config(config.get("server"))
                 .addMediaSupport(getMediaType(config))
                 .build().start();
@@ -42,17 +42,17 @@ public final class ConfigService
         return webServer;
     }
 
-    private static Config buildConfig() {
+    static Config buildConfig() {
         return Config.builder()
                 .disableEnvironmentVariablesSource()
-                    .addSource(directory("conf"))
-                    .addSource(classpath("config.properties"))
-                    .addSource(classpath("constants.properties").optional())
-                    .addSource(file("src/main/resources/application.yaml"))
+                .addSource(directory("conf"))
+                .addSource(classpath("config.properties"))
+                .addSource(classpath("constants.properties").optional())
+                .addSource(file("src/main/resources/application.yaml"))
                 .build();
     }
 
-    private static MediaSupport getMediaType(final Config config) {
+    static MediaSupport getMediaType(final Config config) {
         return switch (config.get("mediaType").asString().orElse("")) {
             case "jsonp" -> JsonpSupport.create();
             default -> JsonbSupport.create();
