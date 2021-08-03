@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-mvn clean install
-
 javac -d ../mods/config \
 --module-path ../mods:../target/libs \
 src/main/java/module-info.java \
