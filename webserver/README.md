@@ -57,7 +57,7 @@ sh modularJar.sh
 
 ## To run
 ```bash
-java -p ../modularjars:../target/libs -m helloworld
+java -p ../modularjars:../target/libs -m greeting
 ```
 Or
 
