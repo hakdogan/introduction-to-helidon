@@ -2,6 +2,7 @@ package org.jugistanbul.reactive.filter;
 
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -34,7 +35,7 @@ public class Filter<T, R> extends SubmissionPublisher<R> implements Flow.Process
     @Override
     public void onNext(T item) {
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(1, 500));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

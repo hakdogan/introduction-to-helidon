@@ -1,6 +1,8 @@
 package org.jugistanbul.reactive.subscriber;
 
 import java.util.concurrent.Flow;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /*
@@ -26,6 +28,13 @@ public class Subscriber<T> implements Flow.Subscriber<T>
 
     @Override
     public void onNext(T item) {
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(800, 1000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         LOGGER.info(String.format("%s got %s in %s thread", name, item, Thread.currentThread().getName()));
         subscription.request(1);
     }

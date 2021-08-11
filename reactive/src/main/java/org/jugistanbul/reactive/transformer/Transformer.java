@@ -2,6 +2,8 @@ package org.jugistanbul.reactive.transformer;
 
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
@@ -32,6 +34,12 @@ public class Transformer<T, R> extends SubmissionPublisher<R> implements Flow.Pr
 
     @Override
     public void onNext(T item) {
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(1, 1000));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         R transformedItem = (R) function.apply(item);
         LOGGER.info(String.format("%s transformed to %s by %s in %s thread",

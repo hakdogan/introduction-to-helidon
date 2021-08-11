@@ -12,16 +12,17 @@ import java.util.logging.Logger;
  * @author hakdogan (huseyin.akdogan@patikaglobal.com)
  * Created on 10.08.2021
  */
-public class NumbersStream {
-    private static final SubmissionPublisher<Integer> oddNumberPublisher = new SubmissionPublisher<>();
-    private static final Subscriber<Integer> oddNumberSubscriber = new Subscriber<>("Odd Number Subscriber");
-    private static final Filter<Integer, Integer> oddNumberFilter = new Filter<>("Odd Number Filter", n -> n % 2 == 1);
-    private static final Transformer<Integer, Integer> oddNumberTransformer = new Transformer<>("Odd Number Transformer", NumbersStream::transformGivenNumber);
+public class NumbersStream
+{
+    static final SubmissionPublisher<Integer> oddNumberPublisher = new SubmissionPublisher<>();
+    static final Subscriber<Integer> oddNumberSubscriber = new Subscriber<>("Odd Number Subscriber");
+    static final Filter<Integer, Integer> oddNumberFilter = new Filter<>("Odd Number Filter", n -> n % 2 == 1);
+    static final Transformer<Integer, Integer> oddNumberTransformer = new Transformer<>("Odd Number Transformer", NumbersStream::transformGivenNumber);
 
-    private static final SubmissionPublisher<Integer> evenNumberPublisher = new SubmissionPublisher<>();
-    private static final Subscriber<Integer> evenNumberSubscriber = new Subscriber<>("Even Number Subscriber");
-    private static final Filter<Integer, Integer> evenNumberFilter = new Filter<>("Even Number Filter", n -> n % 2 != 1);
-    private static final Transformer<Integer, Integer> evenNumberTransformer = new Transformer<>("Even Number Transformer", NumbersStream::transformGivenNumber);
+    static final SubmissionPublisher<Integer> evenNumberPublisher = new SubmissionPublisher<>();
+    static final Subscriber<Integer> evenNumberSubscriber = new Subscriber<>("Even Number Subscriber");
+    static final Filter<Integer, Integer> evenNumberFilter = new Filter<>("Even Number Filter", n -> n % 2 != 1);
+    static final Transformer<Integer, Integer> evenNumberTransformer = new Transformer<>("Even Number Transformer", NumbersStream::transformGivenNumber);
 
     private static final Logger LOGGER = Logger.getLogger(NumbersStream.class.getName());
 
@@ -29,8 +30,8 @@ public class NumbersStream {
 
         LOGGER.info("Items are being pushed...");
 
-        Multi<Integer> concatNumbers = Multi.concat(oddNumberFilter, evenNumberFilter);
-        concatNumbers.forEach(item -> LOGGER.info(String.format("%s consumed", item)));
+        Multi.concat(oddNumberTransformer, evenNumberTransformer)
+                .forEach(item -> LOGGER.info(String.format("%s consumed", item)));
 
         oddNumberPusher();
         TimeUnit.SECONDS.sleep(15);
@@ -50,37 +51,28 @@ public class NumbersStream {
     }
 
     private static CompletableFuture<Void> oddNumberPusher() {
-        return CompletableFuture.runAsync(() -> {
-
-            oddNumberPublisher.subscribe(oddNumberFilter);
-            oddNumberFilter.subscribe(oddNumberTransformer);
-            oddNumberTransformer.subscribe(oddNumberSubscriber);
-
-            sourceNumber().subscribe(item -> {
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                oddNumberPublisher.submit(item);
-            });
-        });
+        oddNumberPublisher.subscribe(oddNumberFilter);
+        oddNumberFilter.subscribe(oddNumberTransformer);
+        oddNumberTransformer.subscribe(oddNumberSubscriber);
+        return runner(oddNumberPublisher);
     }
 
     private static CompletableFuture<Void> evenNumberPusher() {
+        evenNumberPublisher.subscribe(evenNumberFilter);
+        evenNumberFilter.subscribe(evenNumberTransformer);
+        evenNumberTransformer.subscribe(evenNumberSubscriber);
+        return runner(evenNumberPublisher);
+    }
+
+    private static <T> CompletableFuture<Void> runner(final SubmissionPublisher<T> publisher){
         return CompletableFuture.runAsync(() -> {
-
-            evenNumberPublisher.subscribe(evenNumberFilter);
-            evenNumberFilter.subscribe(evenNumberTransformer);
-            evenNumberTransformer.subscribe(evenNumberSubscriber);
-
             sourceNumber().subscribe(item -> {
                 try {
-                    TimeUnit.SECONDS.sleep(1);
+                    TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(1, 1000));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                evenNumberPublisher.submit(item);
+                publisher.submit((T) item);
             });
         });
     }
