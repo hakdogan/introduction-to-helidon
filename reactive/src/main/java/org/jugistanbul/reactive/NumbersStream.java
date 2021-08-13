@@ -1,12 +1,9 @@
 package org.jugistanbul.reactive;
 
 import io.helidon.common.reactive.Multi;
-import org.jugistanbul.reactive.filter.Filter;
 import org.jugistanbul.reactive.subscriber.Subscriber;
-import org.jugistanbul.reactive.transformer.Transformer;
-
-import java.util.concurrent.*;
-import java.util.logging.Logger;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /*
  * @author hakdogan (huseyin.akdogan@patikaglobal.com)
@@ -14,66 +11,32 @@ import java.util.logging.Logger;
  */
 public class NumbersStream
 {
-    static final SubmissionPublisher<Integer> oddNumberPublisher = new SubmissionPublisher<>();
     static final Subscriber<Integer> oddNumberSubscriber = new Subscriber<>("Odd Number Subscriber");
-    static final Filter<Integer, Integer> oddNumberFilter = new Filter<>("Odd Number Filter", n -> n % 2 == 1);
-    static final Transformer<Integer, Integer> oddNumberTransformer = new Transformer<>("Odd Number Transformer", NumbersStream::transformGivenNumber);
-
-    static final SubmissionPublisher<Integer> evenNumberPublisher = new SubmissionPublisher<>();
     static final Subscriber<Integer> evenNumberSubscriber = new Subscriber<>("Even Number Subscriber");
-    static final Filter<Integer, Integer> evenNumberFilter = new Filter<>("Even Number Filter", n -> n % 2 != 1);
-    static final Transformer<Integer, Integer> evenNumberTransformer = new Transformer<>("Even Number Transformer", NumbersStream::transformGivenNumber);
+    static final Predicate<Integer> oddNumberPredicate = n -> n % 2 == 1;
+    static final Predicate<Integer> evenNumberPredicate = n -> n % 2 != 1;
 
-    private static final Logger LOGGER = Logger.getLogger(NumbersStream.class.getName());
+    public static void main(String[] args) {
 
-    public static void main(String[] args) throws InterruptedException {
+        Multi<Integer> oddNumbers = naturalNumbers(oddNumberPredicate);
+        oddNumbers.subscribe(oddNumberSubscriber);
 
-        LOGGER.info("Items are being pushed...");
+        Multi<Integer> evenNumbers = naturalNumbers(evenNumberPredicate);
+        evenNumbers.subscribe(evenNumberSubscriber);
 
-        Multi.concat(oddNumberTransformer, evenNumberTransformer)
-                .forEach(item -> LOGGER.info(String.format("%s consumed", item)));
-
-        oddNumberPusher();
-        TimeUnit.SECONDS.sleep(15);
-        oddNumberPublisher.close();
-
-        evenNumberPusher();
-        TimeUnit.SECONDS.sleep(15);
-        evenNumberPublisher.close();
+        Multi.concat(oddNumbers, evenNumbers)
+                .compose(number ->
+                        number.map(n -> String.format("Square of %s is %s", n, (int) Math.pow(n, 2))))
+                .subscribe(System.out::println);
     }
 
-    private static Integer transformGivenNumber(final Integer number) {
-        return number * ThreadLocalRandom.current().nextInt(1, 1000);
+    static Multi<Integer> naturalNumbers(final Predicate<Integer> predicate) {
+        return Multi.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .filter(predicate);
     }
 
-    private static Multi<Integer> sourceNumber() {
-        return Multi.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-    }
-
-    private static CompletableFuture<Void> oddNumberPusher() {
-        oddNumberPublisher.subscribe(oddNumberFilter);
-        oddNumberFilter.subscribe(oddNumberTransformer);
-        oddNumberTransformer.subscribe(oddNumberSubscriber);
-        return runner(oddNumberPublisher);
-    }
-
-    private static CompletableFuture<Void> evenNumberPusher() {
-        evenNumberPublisher.subscribe(evenNumberFilter);
-        evenNumberFilter.subscribe(evenNumberTransformer);
-        evenNumberTransformer.subscribe(evenNumberSubscriber);
-        return runner(evenNumberPublisher);
-    }
-
-    private static <T> CompletableFuture<Void> runner(final SubmissionPublisher<T> publisher){
-        return CompletableFuture.runAsync(() -> {
-            sourceNumber().subscribe(item -> {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(ThreadLocalRandom.current().nextInt(1, 1000));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                publisher.submit((T) item);
-            });
-        });
+    static Multi<String> transformer(final Multi<Integer> numbers,
+                                     final Function<Multi<Integer>, Multi<String>> func) {
+        return numbers.to(func);
     }
 }
