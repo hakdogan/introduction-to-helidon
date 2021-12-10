@@ -56,7 +56,7 @@ content-length: 39
 ```
 
 ## Requirements
-* JDK 12 or later
+* JDK 16 or later
 
 ## To compile
 ```bash
