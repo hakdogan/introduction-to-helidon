@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>org.jugistanbul</groupId>
-            <artifactId>greeting</artifactId>
+            <artifactId>webserver</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
