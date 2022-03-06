@@ -25,6 +25,7 @@
         <module>webserver</module>
         <module>config</module>
         <module>reactive</module>
+        <module>health-check</module>
     </modules>
 
     <dependencies>
