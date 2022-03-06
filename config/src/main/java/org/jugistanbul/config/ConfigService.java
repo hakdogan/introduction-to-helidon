@@ -35,7 +35,7 @@ public final class ConfigService
                 .build().start();
 
         webServer.thenAccept(ws -> {
-            LOGGER.info("Web server is up! http://localhost:" + ws.port() + "/config");
+            LOGGER.info(String.format("Web server is up! http://localhost:%s/config", ws.port()));
             ws.whenShutdown().thenRun(() -> LOGGER.info("Web server is Down. Good bye!"));
         }).exceptionallyAccept(t -> LOGGER.log(Level.SEVERE, String.format("Startup failed: %s", t.getMessage())));
 

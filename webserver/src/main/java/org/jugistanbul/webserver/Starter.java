@@ -31,7 +31,7 @@ public final class Starter
                 .build()).config(config.get("server")).build().start();
 
         webServer.thenAccept(ws -> {
-            LOGGER.info("Web server is up! http://localhost:" + ws.port() + "/api");
+            LOGGER.info(String.format("Web server is up! http://localhost:%s/api", ws.port()));
             ws.whenShutdown().thenRun(() -> LOGGER.info("Web server is Down. Good bye!"));
         }).exceptionallyAccept(t -> LOGGER.log(Level.SEVERE, String.format("Startup failed: %s", t.getMessage())));
 
